@@ -4,6 +4,8 @@
 
 * fasttext embeddings can be downloaded from [here](https://dl.fbaipublicfiles.com/fasttext/vectors-crawl/cc.en.300.vec.gz)
 
+* Extract the embeddings (.vec file) and store in "embeddings/" folder under the name "cc.en.300.vec".
+
 ## Usage
 
 1. To train the model

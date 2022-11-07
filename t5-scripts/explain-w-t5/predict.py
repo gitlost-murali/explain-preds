@@ -52,7 +52,7 @@ def main():
                                   offensive_lexfile= args.offensive_lexicon,
                                   templatehandler=templatehandler)
     device_to_train = args.device if torch.cuda.is_available() else "cpu"
-    print("Decide to train", device_to_train)
+    print("Device to train", device_to_train)
     trainer = pl.Trainer(accelerator=device_to_train, devices=1)
     # trainer.test(model, testdm.test_dataloader())
     outs = trainer.predict(model, testdm.test_dataloader())

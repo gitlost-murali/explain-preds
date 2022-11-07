@@ -40,7 +40,7 @@ def main():
     testdm = Inference_LitOffData(test_file = args.test_file,
                                   labelmapper=templatehandler.labelmapper)
     device_to_train = args.device if torch.cuda.is_available() else "cpu"
-    print("Decide to train", device_to_train)
+    print("Device to use ", device_to_train)
     trainer = pl.Trainer(accelerator=device_to_train, devices=1)
     trainer.test(model, testdm.test_dataloader())
 

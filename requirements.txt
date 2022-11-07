@@ -1,4 +1,6 @@
-pytorch==1.12.1
+matplotlib
+numpy
+torch==1.12.1
 tensorflow==2.10.0
 scikit-learn==1.1.2
 pytorch-lightning==1.7.7
@@ -8,4 +10,5 @@ wordsegment==1.3.1
 sacrebleu
 sentencepiece
 seaborn
-matplotlib
+nltk
+spacy==3.4.2

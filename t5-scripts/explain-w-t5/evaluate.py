@@ -47,10 +47,7 @@ def main():
     device_to_train = args.device if torch.cuda.is_available() else "cpu"
     print("Decide to train", device_to_train)
     trainer = pl.Trainer(accelerator=device_to_train, devices=1)
-    # trainer.test(model, testdm.test_dataloader())
-    import pdb;
-    outs = trainer.predict(model, testdm.test_dataloader())
-    pdb.set_trace()
+    trainer.test(model, testdm.test_dataloader())
 
 if __name__ == '__main__':
     main()

@@ -58,50 +58,52 @@ def create_arg_parser():
     args = parser.parse_args()
     return args
 
+def main():
+    args = create_arg_parser()
+    print(args)
 
-args = create_arg_parser()
-print(args)
+    pl.seed_everything(args.seed, workers=True)
 
-pl.seed_everything(args.seed, workers=True)
+    ckpt_folder = args.ckpt_folder
+    Path(ckpt_folder).mkdir(parents=True, exist_ok=True)
 
-ckpt_folder = args.ckpt_folder
-Path(ckpt_folder).mkdir(parents=True, exist_ok=True)
-
-templatehandler = TemplateHandler()
-print("Templates used are as follows:")
-print("="*30)
-print(f"label mapper => {templatehandler.labelmapper}")
-print("="*30)
-
-
-dm = LitOffData(templatehandler = templatehandler,
-                train_file =  args.train_file,
-                 dev_file =  args.dev_file,
-                 batch_size = args.batch_size,
-                 max_seq_len = args.max_seq_len,
-                 modelname = args.langmodel_name,)
+    templatehandler = TemplateHandler()
+    print("Templates used are as follows:")
+    print("="*30)
+    print(f"label mapper => {templatehandler.labelmapper}")
+    print("="*30)
 
 
-model = LitModel(
-                 templatehandler = templatehandler,
-                 modelname = args.langmodel_name, 
-                 learning_rate = args.learning_rate,
-                 batch_size = args.batch_size)
+    dm = LitOffData(templatehandler = templatehandler,
+                    train_file =  args.train_file,
+                    dev_file =  args.dev_file,
+                    batch_size = args.batch_size,
+                    max_seq_len = args.max_seq_len,
+                    modelname = args.langmodel_name,)
 
-#
-early_stopping = EarlyStopping(monitor="val_loss", mode="min", patience = 3)
-checkpoint_callback = ModelCheckpoint(dirpath=ckpt_folder, monitor="val_loss",
-                                      mode="min", filename="best-model")
 
-device_to_train = args.device if torch.cuda.is_available() else "cpu"
+    model = LitModel(
+                    templatehandler = templatehandler,
+                    modelname = args.langmodel_name, 
+                    learning_rate = args.learning_rate,
+                    batch_size = args.batch_size)
 
-trainer = pl.Trainer(deterministic=True, accelerator=device_to_train, devices=1,
-                     max_epochs = args.num_epochs, fast_dev_run=False,
-                     callbacks=[ early_stopping, checkpoint_callback ],
-                     default_root_dir = args.ckpt_folder)
+    #
+    early_stopping = EarlyStopping(monitor="val_loss", mode="min", patience = 3)
+    checkpoint_callback = ModelCheckpoint(dirpath=ckpt_folder, monitor="val_loss",
+                                        mode="min", filename="best-model")
 
-trainer.fit(model, dm)
+    device_to_train = args.device if torch.cuda.is_available() else "cpu"
 
-print(f"Best checkpoint is {checkpoint_callback.best_model_path}")
+    trainer = pl.Trainer(deterministic=True, accelerator=device_to_train, devices=1,
+                        max_epochs = args.num_epochs, fast_dev_run=False,
+                        callbacks=[ early_stopping, checkpoint_callback ],
+                        default_root_dir = args.ckpt_folder)
 
-# trainer.predict(model, dm.test_dataloader())
+    trainer.fit(model, dm)
+
+    print(f"Best checkpoint is {checkpoint_callback.best_model_path}")
+
+
+if __name__ == '__main__':
+    main()

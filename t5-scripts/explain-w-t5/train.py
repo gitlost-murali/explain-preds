@@ -19,10 +19,10 @@ from specific_utils import LitModel, LitOffData, TemplateHandler
 def create_arg_parser():
     parser = argparse.ArgumentParser()
     
-    parser.add_argument("-i", "--train_file", default='../../data/train.tsv', type=str,
+    parser.add_argument("--train_file", default='../../data/train.tsv', type=str,
                         help="Input file to learn from (default train.txt)")
     
-    parser.add_argument("-d", "--dev_file", type=str, default='../../data/dev.tsv',
+    parser.add_argument("--dev_file", type=str, default='../../data/dev.tsv',
                         help="Separate dev set to read in (default dev.txt)")
     
     parser.add_argument("--learning_rate", default=1e-4, type=float,
@@ -56,50 +56,51 @@ def create_arg_parser():
     args = parser.parse_args()
     return args
 
+def main():
+    args = create_arg_parser()
+    print(args)
 
+    pl.seed_everything(args.seed, workers=True)
 
-args = create_arg_parser()
-print(args)
+    ckpt_folder = args.ckpt_folder
 
-pl.seed_everything(args.seed, workers=True)
+    templatehandler = TemplateHandler()
 
-ckpt_folder = args.ckpt_folder
+    print("Templates used are as follows:")
+    print("="*30)
+    print(f"label mapper => {templatehandler.labelmapper}")
+    print(f"Prompt added => {templatehandler.explanation_filler}")
+    print("="*30)
 
-templatehandler = TemplateHandler()
+    dm = LitOffData( templatehandler = templatehandler,
+                    train_file =  args.train_file,
+                    dev_file =  args.dev_file, 
+                    offensive_lexfile=args.offensive_lexicon,
+                    batch_size = args.batch_size,
+                    max_seq_len = args.max_seq_len,
+                    modelname = args.langmodel_name,)
 
-print("Templates used are as follows:")
-print("="*30)
-print(f"label mapper => {templatehandler.labelmapper}")
-print(f"Prompt added => {templatehandler.explanation_filler}")
-print("="*30)
+    model = LitModel(
+                    templatehandler = templatehandler,
+                    modelname = args.langmodel_name, 
+                    learning_rate = args.learning_rate,
+                    batch_size = args.batch_size)
 
-dm = LitOffData( templatehandler = templatehandler,
-                 train_file =  args.train_file,
-                 dev_file =  args.dev_file, 
-                 offensive_lexfile=args.offensive_lexicon,
-                 batch_size = args.batch_size,
-                 max_seq_len = args.max_seq_len,
-                 modelname = args.langmodel_name,)
+    #
+    early_stopping = EarlyStopping(monitor="val_loss", mode="min", patience = 3)
+    checkpoint_callback = ModelCheckpoint(dirpath=ckpt_folder,
+                                        monitor="val_loss", mode="min",
+                                        filename="best-model")
 
-model = LitModel(
-                 templatehandler = templatehandler,
-                 modelname = args.langmodel_name, 
-                 learning_rate = args.learning_rate,
-                 batch_size = args.batch_size)
+    device_to_train = args.device if torch.cuda.is_available() else "cpu"
 
-#
-early_stopping = EarlyStopping(monitor="val_loss", mode="min", patience = 3)
-checkpoint_callback = ModelCheckpoint(dirpath=ckpt_folder,
-                                      monitor="val_loss", mode="min",
-                                      filename="best-model")
+    trainer = pl.Trainer(deterministic=True, accelerator=device_to_train, devices=1, 
+                        max_epochs = args.num_epochs, fast_dev_run=None,
+                        callbacks=[ early_stopping, checkpoint_callback ]
+                        , default_root_dir = args.ckpt_folder)
 
-device_to_train = args.device if torch.cuda.is_available() else "cpu"
+    trainer.fit(model, dm)
+    print(f"Best checkpoint is {checkpoint_callback.best_model_path}")
 
-trainer = pl.Trainer(deterministic=True, accelerator=device_to_train, devices=1, 
-                     max_epochs = args.num_epochs, fast_dev_run=None,
-                     callbacks=[ early_stopping, checkpoint_callback ]
-                     , default_root_dir = args.ckpt_folder)
-
-trainer.fit(model, dm)
-
-print(f"Best checkpoint is {checkpoint_callback.best_model_path}")
+if __name__ == '__main__':
+    main()

@@ -5,6 +5,7 @@
 *.pt
 *.pickle
 *.png
+*.check
 
 models/
 

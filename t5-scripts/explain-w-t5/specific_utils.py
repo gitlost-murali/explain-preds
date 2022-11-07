@@ -18,7 +18,7 @@ import pytorch_lightning as pl
 from utils import read_corpus
 from sklearn.utils import class_weight
 
-from templatefile_4 import TemplateHandler
+from templatefile_3 import TemplateHandler
 
 class T5DatasetClass(Dataset):
     def __init__(self, texts, labels, tokenizer, max_length,

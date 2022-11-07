@@ -1,7 +1,7 @@
 class TemplateHandler():
   def __init__(self):
-    self.labelmapper = {"OFF": "as the occurence of certain words has allowed us to detect whether a sentence is offensive or not, the given sentence is classified to be offensive", "NOT": "as the occurence of certain words has allowed us to detect whether a sentence is offensive or not, the given sentence is deemed not offensive"}
-    self.explanation_filler = "because of word instances like"
+    self.labelmapper = {"OFF": "which words made us decide this is offensive, you ask?", "NOT": "which words made us decide this is not offensive, you ask?"}
+    self.explanation_filler = "here you go:"
 
   def explainer(self, lb, offensive_words):
     return f"{self.labelmapper[lb]} {self.explanation_filler} {', '.join(offensive_words)} ." if lb=="OFF" else f"{self.labelmapper[lb]}"

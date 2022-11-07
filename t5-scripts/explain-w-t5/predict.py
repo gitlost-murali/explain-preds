@@ -1,6 +1,5 @@
 """## INFERENCE from checkpoint"""
 from specific_utils import LitModel
-from transformers import AutoTokenizer
 import pytorch_lightning as pl
 from specific_utils import Inference_LitOffData, TemplateHandler
 from common_utils import write_preds_tofile, debug_w_template
@@ -33,9 +32,6 @@ def create_arg_parser():
     parser.add_argument("--device", default="gpu", type=str,
                         help="Type of device to use. gpu/cpu strict naming convention")
 
-    parser.add_argument("--show_cm", default=True, type=bool,
-                        help="Show confusion matrix")
-
     args = parser.parse_args()
     return args
 
@@ -54,7 +50,6 @@ def main():
     device_to_train = args.device if torch.cuda.is_available() else "cpu"
     print("Device to train", device_to_train)
     trainer = pl.Trainer(accelerator=device_to_train, devices=1)
-    # trainer.test(model, testdm.test_dataloader())
     outs = trainer.predict(model, testdm.test_dataloader())
     write_preds_tofile(outs, "onlylabel_preds", templatehandler,args.output_predfile)
     debug_w_template(outs, args.debug_file)

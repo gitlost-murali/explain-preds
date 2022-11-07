@@ -4,6 +4,7 @@
 *.h5*
 *.pt
 *.pickle
+*.png
 
 models/
 

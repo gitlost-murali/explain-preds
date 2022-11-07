@@ -11,7 +11,7 @@ from keras.models import load_model
 def create_arg_parser():
     parser = argparse.ArgumentParser()
     
-    parser.add_argument("-t", "--test_file", type=str, default='../../../data/test.tsv', required= True,
+    parser.add_argument("--test_file", type=str, default='../../../data/test.tsv', required= True,
                         help="If added, use trained model to predict on test set")
 
     parser.add_argument("--best_modelname", default="models/best_model.h5", type=str,
@@ -19,6 +19,9 @@ def create_arg_parser():
 
     parser.add_argument("--batch_size", default=16, type=int,
                         help="Batch size for training")
+
+    parser.add_argument("--output_predfile", type=str, default='preds.txt', required= True,
+                        help="File to store the predictions. Each prediction in a line")
 
     parser.add_argument("--show_cm", default=True, type=bool,
                         help="Show confusion matrix")
@@ -38,7 +41,7 @@ def main():
     X_test, Y_test, tokens_test, Y_test_bin = read_testdata_andvectorize(args.test_file, vectorizer, encoder)
     Y_pred, Y_test = test_set_predict(model, tokens_test, Y_test_bin,
                     "test", encoder, showplot=args.show_cm)
-    write_preds(X_test, Y_test, Y_pred, args.test_file+".lstm-predictions.txt")
+    write_preds(X_test, Y_test, Y_pred, args.output_predfile)
 
 
 

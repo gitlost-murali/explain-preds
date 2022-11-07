@@ -11,7 +11,7 @@ from keras.models import load_model
 def create_arg_parser():
     parser = argparse.ArgumentParser()
     
-    parser.add_argument("-t", "--test_file", type=str, default='../../../data/test.tsv', required= True,
+    parser.add_argument("--test_file", type=str, default='../../../data/test.tsv', required= True,
                         help="If added, use trained model to predict on test set")
 
     parser.add_argument("--best_modelname", default="models/best_model.h5", type=str,
@@ -38,7 +38,6 @@ def main():
     X_test, Y_test, tokens_test, Y_test_bin = read_testdata_andvectorize(args.test_file, vectorizer, encoder)
     Y_pred, Y_test = test_set_predict(model, tokens_test, Y_test_bin,
                     "test", encoder, showplot=args.show_cm)
-    # write_preds(X_test, Y_test, Y_pred, args.test_file+"predictions.txt")
 
 
 

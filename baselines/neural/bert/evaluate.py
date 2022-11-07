@@ -9,7 +9,7 @@ from bert_utils import load_model, read_testdata_andvectorize
 def create_arg_parser():
     parser = argparse.ArgumentParser()
     
-    parser.add_argument("-t", "--test_file", type=str, default='../../../data/test.tsv', required= True,
+    parser.add_argument("--test_file", type=str, default='../../../data/test.tsv', required= True,
                         help="If added, use trained model to predict on test set")
 
     parser.add_argument("--best_modelname", default="models/bert-outputs", type=str,

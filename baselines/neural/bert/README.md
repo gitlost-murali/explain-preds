@@ -1,47 +1,31 @@
 
 # Baseline LSTM
 
-Trains a BERT model using train & dev set. If test set is mentioned, accuracy/F1-score (Macro)
-is calculated with an option of showing the confusion matrix.
+Trains a BERT model using train & dev set.
 
+## Running the model
 
-## Data 
+1. To train the model
 
-Data files are provided as train.tsv, dev.tsv, and test.tsv
+```
+python train.py --train_file ../../../data/train.tsv --dev_file ../../../data/dev.tsv --learning_rate 5e-5 --max_seq_len 200 --langmodel_name bert-base-uncased --output_modelname models/bert-outputs
+```
 
-## Usage of lstm_baseline.py
+2. To evaluate the model
 
-*. One can simply run the file without any command line arguments because the script 
-is set up with best settings as default values for arguments.
+```
+python evaluate.py --test_file ../../../data/test.tsv --best_modelname models/bert-outputs
+```
 
-`python bert_variants.py`
+3. To predict the model
 
-Running with the best hyperparams must give a macro F1-score of around 89/90.
+```
+python predict.py --test_file ../../../data/test.tsv --best_modelname models/bert-outputs --output_predfile preds.txt
+```
 
-Or if you want to change any of the arguments, please type
+If you want to try any other bert variant, please type
 
-`python bert_variants.py --help`
-
-## Usage for bert_variants.py
-
-Trains a BERT model variants using train & dev set. If the test set is mentioned, accuracy/F1-score (Macro) is calculated with an option of showing the confusion matrix.
-
-To run this file,
-
-1. One can simply run the file without any command line arguments because the script 
-is set up with best settings as default values for arguments.
-
-python bert_variants.py
-
-Running with the best hyperparams must give a macro F1-score of around 89/90.
-
-2. Or if you want to change any of the arguments, please type
-
-python bert_variants.py --help
-
-3. If you want to try any other bert variant, please type
-
-python bert_variants.py --langmodel_name distilbert-base-uncased
+python train.py --langmodel_name distilbert-base-uncased
 
 Or for other models, try these:
 
@@ -51,3 +35,4 @@ roberta-base
 bert-base-uncased
 distilbert-base-uncased
 albert-base-v2
+

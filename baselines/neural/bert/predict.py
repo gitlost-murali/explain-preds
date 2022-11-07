@@ -15,6 +15,9 @@ def create_arg_parser():
     parser.add_argument("--best_modelname", default="models/bert-outputs", type=str,
                         help="Name of the trained model that will be saved after training")
 
+    parser.add_argument("--output_predfile", type=str, default='preds.txt', required= True,
+                        help="File to store the predictions. Each prediction in a line")
+
     parser.add_argument("--batch_size", default=16, type=int,
                         help="Batch size for training")
 
@@ -35,7 +38,7 @@ def main():
     X_test, Y_test, tokens_test, Y_test_bin = read_testdata_andvectorize(args.test_file, max_seq_len, tokenizer, encoder)
     Y_pred, Y_test = test_set_predict(best_model, tokens_test, Y_test_bin,
                     "test", encoder, showplot=args.show_cm)
-    write_preds(X_test, Y_test, Y_pred, args.test_file+".bert-predictions")
+    write_preds(X_test, Y_test, Y_pred, args.output_predfile)
 
 if __name__ == '__main__':
     main()

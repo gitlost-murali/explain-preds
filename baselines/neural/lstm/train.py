@@ -8,19 +8,6 @@
 
 ''' Trains a LSTM model using train & dev set. If test set is mentioned, accuracy/F1-score (Macro)
 is calculated with an option of showing the confusion matrix.
-
-To run this file,
-
-1. One can simply run the file without any command line arguments because the script 
-is set up with best settings as default values for arguments.
-
-python lstm_baseline.py
-
-Running with the best hyperparams must give a macro F1-score of around 89/90.
-
-Or if you want to change any of the arguments, please type
-
-python lstm_baseline.py --help
 '''
 
 import random as python_random
@@ -56,24 +43,17 @@ from gensim.models import KeyedVectors
 
 def create_arg_parser():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-i", "--train_file", default='../../../data/train.tsv', type=str,
+    parser.add_argument("--train_file", default='../../../data/train.tsv', type=str,
                         help="Input file to learn from (default train.txt)")
-    
-    parser.add_argument("-d", "--dev_file", type=str, default='../../../data/dev.tsv',
+    parser.add_argument("--dev_file", type=str, default='../../../data/dev.tsv',
                         help="Separate dev set to read in (default dev.txt)")
-
-    parser.add_argument("-t", "--test_file", type=str, default='../../../data/test.tsv',
-                        help="If added, use trained model to predict on test set")
-
-    parser.add_argument("-e", "--embeddings", default='embeddings/cc.en.300.vec', type=str,
+    parser.add_argument("--embeddings", default='embeddings/cc.en.300.vec', type=str,
                         help="Embedding file we are using (Strictly .vec files)")
-    parser.add_argument("--show_confusionmatrix", default=True, type=bool,
-                        help="Show confusion matrix of the model on test set")
     parser.add_argument("--learning_rate", default=1e-4, type=float,
                         help="Learning rate for the optimizer")
     parser.add_argument("--batch_size", default=16, type=int,
                         help="Batch size for training")
-    parser.add_argument("--num_epochs", default=50, type=int,
+    parser.add_argument("--num_epochs", default=20, type=int,
                         help="Number of epochs for training")
     parser.add_argument("--max_seq_len", default=100, type=int,
                         help="Maximum length of input sequence after BPE")

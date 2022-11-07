@@ -1,4 +1,4 @@
-# explain-preds
+# Explain-preds
 Code repo of the final LFD paper
 
 ## Setup

@@ -17,9 +17,7 @@ pip install -r requirements.txt
 
 `cd t5-scripts/explain-w-t5/`
 
-2. Select a template you want. `cd t5-scripts/explain-w-t5/` contains multiple `templatefile_{1,2,3,4,5,6}.py` template files. Decide which template you want to try out.
-
-3. Currently, we use the template (template 4) that gave us good results. If you want to try other template, update `specific_utils.py` with the filename you want. You need to change the import statement.
+2. __Selecting a template:__ This folder contains multiple `templatefile_{1,2,3,4,5,6}.py` template files. Decide which template you want to try out. Currently, we use the template (template 4) that gave us good results. If you want to try other templates, update `specific_utils.py` with the filename you want while importing TemplateHandler from `templatefile_{1,2,3,4,5,6}.py`. For example,
 
 From 
 

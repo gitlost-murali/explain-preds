@@ -20,7 +20,7 @@ The best performing T5-explanation prompt-3 model can be downloaded from [here](
 2. Run the training script
 
 ```
-python train.py --train_file ../../data/train.tsv --dev_file ../../data/dev.tsv --learning_rate 1e-4 --batch_size 8 --num_epochs 5 --max_seq_len 150 --langmodel_name t5-base --offensive_lexicon ../lexicon_words/final_offensive_lexicon.txt --ckpt_folder ./t5explain-files/ --seed 1234
+python train.py --train_file ../../data/train.tsv --dev_file ../../data/dev.tsv --learning_rate 1e-4 --batch_size 8 --num_epochs 5 --max_seq_len 150 --langmodel_name t5-base --offensive_lexicon ../lexicon_words/final_offensive_lexicon.txt --ckpt_folder ./t5explain-files/ --seed 1234 --device cpu
 ```
 
 3. The best model will be stored in t5explain-files/best-model.ckpt
@@ -28,7 +28,7 @@ python train.py --train_file ../../data/train.tsv --dev_file ../../data/dev.tsv 
 4. Evaluating the model on the test file
 
 ```
-python evaluate.py --test_file ../../data/test.tsv --best_modelname t5explain-files/bestmodel.ckpt --offensive_lexicon ../lexicon_words/final_offensive_lexicon.txt --batch_size 16 --device gpu
+python evaluate.py --test_file ../../data/test.tsv --best_modelname t5explain-files/bestmodel.ckpt --offensive_lexicon ../lexicon_words/final_offensive_lexicon.txt --batch_size 16 --device cpu
 ```
 
 5. Getting the predictions into a file

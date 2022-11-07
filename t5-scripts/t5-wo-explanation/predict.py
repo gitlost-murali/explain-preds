@@ -1,6 +1,5 @@
 """## INFERENCE from checkpoint"""
 from specific_utils import LitModel
-from transformers import AutoTokenizer
 import pytorch_lightning as pl
 from specific_utils import Inference_LitOffData, TemplateHandler
 import argparse
@@ -48,7 +47,6 @@ def main():
     device_to_train = args.device if torch.cuda.is_available() else "cpu"
     print("Device to use ", device_to_train)
     trainer = pl.Trainer(accelerator=device_to_train, devices=1)
-    # trainer.test(model, testdm.test_dataloader())
     outs = trainer.predict(model, testdm.test_dataloader())
     write_preds_tofile(outs, "preds", templatehandler,args.output_predfile)
     debug_wo_template(outs, args.debug_file)

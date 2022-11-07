@@ -9,7 +9,7 @@ from common_utils import write_preds_tofile, debug_wo_template
 def create_arg_parser():
     parser = argparse.ArgumentParser()
     
-    parser.add_argument("-t", "--test_file", type=str, default='../../data/test.tsv', required= True,
+    parser.add_argument("--test_file", type=str, default='../../data/test.tsv', required= True,
                         help="If added, use trained model to predict on test set")
 
     parser.add_argument("--output_predfile", type=str, default='preds.txt', required= True,
@@ -26,9 +26,6 @@ def create_arg_parser():
 
     parser.add_argument("--device", default="gpu", type=str,
                         help="Type of device to use. gpu/cpu strict naming convention")
-
-    parser.add_argument("--show_cm", default=True, type=bool,
-                        help="Show confusion matrix")
 
     args = parser.parse_args()
     return args

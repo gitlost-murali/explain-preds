@@ -25,10 +25,10 @@ from specific_utils import LitModel, LitOffData, TemplateHandler
 def create_arg_parser():
     parser = argparse.ArgumentParser()
     
-    parser.add_argument("-i", "--train_file", default='../../data/train.tsv', type=str,
+    parser.add_argument("--train_file", default='../../data/train.tsv', type=str,
                         help="Input file to learn from (default train.txt)")
     
-    parser.add_argument("-d", "--dev_file", type=str, default='../../data/dev.tsv',
+    parser.add_argument("--dev_file", type=str, default='../../data/dev.tsv',
                         help="Separate dev set to read in (default dev.txt)")
         
     parser.add_argument("--learning_rate", default=1e-4, type=float,
